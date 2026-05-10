@@ -2083,8 +2083,14 @@ uploadZone.addEventListener('drop', async e => {
   }
 });
 
-// ── RECOGNIZE via ShazamIO (Python) ──
+// ── RECOGNIZE ──
+const IS_ELECTRON = typeof window !== 'undefined' && window.process?.type === 'renderer';
+
 async function recognizeBlob(blob) {
+  if (!IS_ELECTRON) {
+    showError('Распознавание доступно только в приложении');
+    return;
+  }
   try {
     const { ipcRenderer } = require('electron');
     const arrayBuffer = await blob.arrayBuffer();
